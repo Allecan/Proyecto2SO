@@ -32,19 +32,20 @@ public class JFrame extends javax.swing.JFrame {
     public JFrame() {
         initComponents();
         this.setLocationRelativeTo(null);
+        cReader = 0;
+        cWriter = 0;
 
         modelo.addColumn("No.");
         modelo.addColumn("Estado");
         this.jTableLectores.setModel(modelo);
         jTableLectores.setEnabled(false);
+        jTableLectores.setDefaultRenderer(Object.class, new MiRender());
 
         modelo2.addColumn("No.");
         modelo2.addColumn("Estado");
         this.jTableEscritores.setModel(modelo2);
         jTableEscritores.setEnabled(false);
         jTableEscritores.setDefaultRenderer(Object.class, new MiRender());
-        cReader = 0;
-        cWriter = 0;
     }
 
     /**
@@ -243,11 +244,13 @@ private void InsertarLector() {
                 Logger.getLogger(JFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
             int fila = cReader - 1;
-
-            while (true) {
-
-                modelo.setValueAt(("Ejecutandose..."), fila, 1);
+            modelo.setValueAt(("Ejecutandose..."), fila, 1);
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(JFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
+            modelo.setValueAt(("Murio"), fila, 1);
         }
     }
 
@@ -261,11 +264,6 @@ private void InsertarLector() {
                 Logger.getLogger(JFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
             int fila = cWriter - 1;
-
-//            while (true) {
-//
-//                modelo2.setValueAt(("Ejecutandose..."), fila, 1);
-//            }
             modelo2.setValueAt(("Ejecutandose..."), fila, 1);
             try {
                 Thread.sleep(2000);
