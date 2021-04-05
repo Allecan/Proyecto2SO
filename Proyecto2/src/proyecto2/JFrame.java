@@ -28,6 +28,8 @@ public class JFrame extends javax.swing.JFrame {
     DefaultTableModel modelo2 = new DefaultTableModel();
     int nReader;
     int nWriter;
+    int cReader;
+    int cWriter;
 
     /**
      * Creates new form JFrame
@@ -35,6 +37,8 @@ public class JFrame extends javax.swing.JFrame {
     public JFrame() {
         initComponents();
         this.setLocationRelativeTo(null);
+        nReader = 0;
+        nWriter = 0;
         nReader = 0;
         nWriter = 0;
 
@@ -271,8 +275,8 @@ private void InsertarLector() {
                 } catch (InterruptedException ex) {
                     Logger.getLogger(JFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                nReader += 1;
-                int fila = nReader - 1;
+                cReader += 1;
+                int fila = cReader - 1;
                 tiempoLector(fila);
 //              Sale de las regiones críticas
                 mutex.acquire();
@@ -313,8 +317,8 @@ private void InsertarLector() {
                 } catch (InterruptedException ex) {
                     Logger.getLogger(JFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                nWriter += 1;
-                int fila = nWriter - 1;
+                cWriter += 1;
+                int fila = cWriter - 1;
                 hiloChange(fila);
 //              Sale de las regiones críticas
                 servicio.release();
