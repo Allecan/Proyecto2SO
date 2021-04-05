@@ -20,7 +20,10 @@ import javax.swing.table.DefaultTableModel;
  */
 public class JFrame extends javax.swing.JFrame {
 
+    static  int nl=0;
+    private static Semaphore servicio = new Semaphore(1, true); // Controla el acceso a la región crítica
     private static Semaphore mutex = new Semaphore(1, true);
+    private static Semaphore cola_servicio = new Semaphore(1, true);
     DefaultTableModel modelo = new DefaultTableModel();
     DefaultTableModel modelo2 = new DefaultTableModel();
     int cReader;
@@ -259,18 +262,31 @@ private void InsertarLector() {
         @Override
         public void run() {
             try {
-                Thread.sleep(1000);
+//              Entra a las regiones críticas
+                cola_servicio.acquire();
+                servicio.acquire();
+                cola_servicio.release();
+//              En esta parte se hace ingreso a la región crítica
+//              Se realiza la escritura
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(JFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                cWriter += 1;
+                int fila = cWriter - 1;
+                modelo2.setValueAt(("Ejecutandose..."), fila, 1);
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(JFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                modelo2.setValueAt(("Murio"), fila, 1);
+//              Sale de las regiones críticas
+                servicio.release();
             } catch (InterruptedException ex) {
                 Logger.getLogger(JFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
-            int fila = cWriter - 1;
-            modelo2.setValueAt(("Ejecutandose..."), fila, 1);
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(JFrame.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            modelo2.setValueAt(("Murio"), fila, 1);
         }
     }
 
