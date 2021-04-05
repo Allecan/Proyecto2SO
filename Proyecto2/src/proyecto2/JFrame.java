@@ -20,7 +20,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class JFrame extends javax.swing.JFrame {
 
-    static  int nl=0;
+    static int nl = 0;
     private static Semaphore servicio = new Semaphore(1, true); // Controla el acceso a la región crítica
     private static Semaphore mutex = new Semaphore(1, true);
     private static Semaphore cola_servicio = new Semaphore(1, true);
@@ -237,6 +237,17 @@ private void InsertarLector() {
         modelo2.addRow(info);
     }
 
+    public void tiempoLector(int fila) {
+
+        modelo.setValueAt(("Ejecutandose..."), fila, 1);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(JFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        modelo.setValueAt(("Murio"), fila, 1);
+    }
+
     public class Lector extends Thread {
 
         @Override
@@ -260,6 +271,7 @@ private void InsertarLector() {
                 }
                 cReader += 1;
                 int fila = cReader - 1;
+                tiempoLector(fila);
 //              Sale de las regiones críticas
                 mutex.acquire();
                 nl--;
@@ -273,7 +285,7 @@ private void InsertarLector() {
         }
     }
 
-    public void hiloChange( int fila){
+    public void hiloChange(int fila) {
         modelo2.setValueAt(("Ejecutandose..."), fila, 1);
         try {
             Thread.sleep(2000);
@@ -282,6 +294,7 @@ private void InsertarLector() {
         }
         modelo2.setValueAt(("Murio"), fila, 1);
     }
+
     public class Escritor extends Thread {
 
         @Override
