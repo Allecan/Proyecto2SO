@@ -164,17 +164,11 @@ public class JFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonLectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLectorActionPerformed
-        cReader += 1;
-        Lector lector = new Lector();
-        lector.start();
-        InsertarLector();
+
     }//GEN-LAST:event_jButtonLectorActionPerformed
 
     private void jButtonEscritorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEscritorActionPerformed
-        cWriter += 1;
-        Escritor escritor = new Escritor();
-        escritor.start();
-        InsertarEscritor();
+
     }//GEN-LAST:event_jButtonEscritorActionPerformed
 
     /**
