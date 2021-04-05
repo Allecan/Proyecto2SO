@@ -242,18 +242,34 @@ private void InsertarLector() {
         @Override
         public void run() {
             try {
-                Thread.sleep(1000);
+//              Entra a las regiones críticas
+                cola_servicio.acquire(); // Entrar a la región crítica de la cola de servicios para agregar un nuevo lector
+                mutex.acquire(); // Entrar a la región crítica del semáforo de lectores para aumentar la cuenta
+                nl++; // Se aumenta el número de lectores activos
+                if (nl == 1) {
+                    servicio.acquire();
+                }
+                cola_servicio.release();
+                mutex.release();
+//              En esta parte se hace ingreso a la región crítica
+//              Se realiza la lectura
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(JFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                cReader += 1;
+                int fila = cReader - 1;
+//              Sale de las regiones críticas
+                mutex.acquire();
+                nl--;
+                if (nl == 0) {
+                    servicio.release();
+                }
+                mutex.release();
             } catch (InterruptedException ex) {
                 Logger.getLogger(JFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
-            int fila = cReader - 1;
-            modelo.setValueAt(("Ejecutandose..."), fila, 1);
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(JFrame.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            modelo.setValueAt(("Murio"), fila, 1);
         }
     }
 
@@ -313,4 +329,5 @@ private void InsertarLector() {
             return this;
         }
     }
+
 }
