@@ -26,8 +26,8 @@ public class JFrame extends javax.swing.JFrame {
     private static Semaphore cola_servicio = new Semaphore(1, true);
     DefaultTableModel modelo = new DefaultTableModel();
     DefaultTableModel modelo2 = new DefaultTableModel();
-    int cReader;
-    int cWriter;
+    int nReader;
+    int nWriter;
 
     /**
      * Creates new form JFrame
@@ -35,8 +35,8 @@ public class JFrame extends javax.swing.JFrame {
     public JFrame() {
         initComponents();
         this.setLocationRelativeTo(null);
-        cReader = 0;
-        cWriter = 0;
+        nReader = 0;
+        nWriter = 0;
 
         modelo.addColumn("No.");
         modelo.addColumn("Estado");
@@ -164,11 +164,19 @@ public class JFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonLectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLectorActionPerformed
-
+        nReader += 1;
+        Lector lector = new Lector();
+        lector.start();
+        InsertarLector();
+        
     }//GEN-LAST:event_jButtonLectorActionPerformed
 
     private void jButtonEscritorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEscritorActionPerformed
-
+   
+        nWriter += 1;
+        Escritor escritor = new Escritor();
+        escritor.start();
+        InsertarEscritor();
     }//GEN-LAST:event_jButtonEscritorActionPerformed
 
     /**
@@ -219,14 +227,14 @@ public class JFrame extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 private void InsertarLector() {
         String[] info = new String[2];
-        info[0] = "Lector " + cReader;
+        info[0] = "Lector " + nReader;
         info[1] = "Creando...";
         modelo.addRow(info);
     }
 
     private void InsertarEscritor() {
         String[] info = new String[2];
-        info[0] = "Escritor " + cWriter;
+        info[0] = "Escritor " + nWriter;
         info[1] = "Creando...";
         modelo2.addRow(info);
     }
@@ -263,8 +271,8 @@ private void InsertarLector() {
                 } catch (InterruptedException ex) {
                     Logger.getLogger(JFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                cReader += 1;
-                int fila = cReader - 1;
+                nReader += 1;
+                int fila = nReader - 1;
                 tiempoLector(fila);
 //              Sale de las regiones críticas
                 mutex.acquire();
@@ -305,8 +313,8 @@ private void InsertarLector() {
                 } catch (InterruptedException ex) {
                     Logger.getLogger(JFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                cWriter += 1;
-                int fila = cWriter - 1;
+                nWriter += 1;
+                int fila = nWriter - 1;
                 hiloChange(fila);
 //              Sale de las regiones críticas
                 servicio.release();
