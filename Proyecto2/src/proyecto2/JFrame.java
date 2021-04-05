@@ -257,6 +257,15 @@ private void InsertarLector() {
         }
     }
 
+    public void hiloChange( int fila){
+        modelo2.setValueAt(("Ejecutandose..."), fila, 1);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(JFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        modelo2.setValueAt(("Murio"), fila, 1);
+    }
     public class Escritor extends Thread {
 
         @Override
@@ -275,13 +284,7 @@ private void InsertarLector() {
                 }
                 cWriter += 1;
                 int fila = cWriter - 1;
-                modelo2.setValueAt(("Ejecutandose..."), fila, 1);
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(JFrame.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                modelo2.setValueAt(("Murio"), fila, 1);
+                hiloChange(fila);
 //              Sale de las regiones críticas
                 servicio.release();
             } catch (InterruptedException ex) {
