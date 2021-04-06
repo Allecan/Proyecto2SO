@@ -39,8 +39,8 @@ public class JFrame extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         nReader = 0;
         nWriter = 0;
-        nReader = 0;
-        nWriter = 0;
+        cReader = 0;
+        cWriter = 0;
 
         modelo.addColumn("No.");
         modelo.addColumn("Estado");
@@ -172,11 +172,10 @@ public class JFrame extends javax.swing.JFrame {
         Lector lector = new Lector();
         lector.start();
         InsertarLector();
-        
+
     }//GEN-LAST:event_jButtonLectorActionPerformed
 
     private void jButtonEscritorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEscritorActionPerformed
-   
         nWriter += 1;
         Escritor escritor = new Escritor();
         escritor.start();
@@ -348,5 +347,4 @@ private void InsertarLector() {
             return this;
         }
     }
-
 }
